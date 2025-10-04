@@ -1,5 +1,6 @@
 import { useGradientSlice } from '../../state/useGradientSlice'
 import { useState } from 'react'
+import { exportGradient, copyToClipboard } from '../../engine/export'
 
 export default function GradientPreview() {
     const kind = useGradientSlice((s) => s.kind)
@@ -38,6 +39,20 @@ export default function GradientPreview() {
         setStops(s2)
     }
 
+    const [msg, setMsg] = useState<string | null>(null)
+
+    const doExport = async (type: 'svg' | 'png' | 'css' | 'json') => {
+        if (!gradient) return
+        const out = exportGradient(gradient, type)
+        if (type === 'png') {
+            window.open(out as string, '_blank')
+            setMsg('PNG opened in new tab')
+        } else {
+            await copyToClipboard(out as string)
+            setMsg(type.toUpperCase() + ' copied to clipboard')
+        }
+    }
+
     return (
         <div style={{ display: 'grid', gap: 16, maxWidth: 480 }}>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -66,7 +81,16 @@ export default function GradientPreview() {
             </div>
             <div>
                 {gradient ? (
-                    <div style={{ width: 320, height: 64, borderRadius: 8, border: '1px solid #ccc', background: gradient.css }} aria-label="gradient preview" />
+                    <>
+                        <div style={{ width: 320, height: 64, borderRadius: 8, border: '1px solid #ccc', background: gradient.css }} aria-label="gradient preview" />
+                        <div style={{ marginTop: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
+                            <span>Export:</span>
+                            {(['svg', 'png', 'css', 'json'] as const).map(type => (
+                                <button key={type} type="button" onClick={() => doExport(type)}>{type.toUpperCase()}</button>
+                            ))}
+                            {msg && <span style={{ color: 'green', marginLeft: 8 }}>{msg}</span>}
+                        </div>
+                    </>
                 ) : (
                     <small>At least 2 stops required</small>
                 )}
