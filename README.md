@@ -1,6 +1,8 @@
 # BMAD Classroom Demo — Step-by-Step Guide (ColorSmith)
 
-> A practical, classroom-friendly walkthrough showing how to use the **BMAD Framework** inside an AI chat environment (like ChatGPT, Custom GPT, or Google Gemini) to create a project — from brainstorming to PRD and technical architecture. This guide follows the ColorSmith demo example.
+A practical, classroom-friendly walkthrough showing how to use the **BMAD Framework** inside an AI chat environment (like ChatGPT, Custom GPT, or Google Gemini) to create a project — from brainstorming to PRD and technical architecture. This guide follows the ColorSmith demo example.
+
+> [Chat Example Preview](https://chatgpt.com/share/68e165fb-c1d8-8003-a926-a043e0d03893) Follow this along to get more clarity on the below steps
 
 ---
 
