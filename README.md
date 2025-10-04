@@ -1,117 +1,145 @@
-# BMAD Classroom Demo — Step‑by‑Step Guide (ColorSmith)
+# BMAD Classroom Demo — Step-by-Step Guide (ColorSmith)
 
-> A concise walkthrough students can follow to recreate our session: from loading the **Team Fullstack** bundle to producing a PRD and an Architecture doc using BMAD’s elicitation workflow.
-
----
-
-## 1) Load the Team
-
-* Open your web AI tool (e.g., ChatGPT Custom GPT / Gemini).
-* Upload the **`team-fullstack.txt`** bundle.
-* Start with the orchestrator by simply talking, e.g., “*help”.
-
-**Outcome:** Orchestrator is active with access to PM, Architect, UX Expert, Analyst, and PO agents.
+> A practical, classroom-friendly walkthrough showing how to use the **BMAD Framework** inside an AI chat environment (like ChatGPT, Custom GPT, or Google Gemini) to create a project — from brainstorming to PRD and technical architecture. This guide follows the ColorSmith demo example.
 
 ---
 
-## 2) Discover Commands & Agents
+## 1) What is BMAD?
 
-* Type `*help` to see core commands and available agents/workflows.
-* Tip: All BMAD commands start with an asterisk `*`.
+BMAD is a **multi-agent workflow framework** that simulates a real product team inside an AI chat. Each agent has a specific responsibility and can be activated with simple commands.
 
-**Outcome:** You can now switch roles and run tasks.
+**Core Agents:**
 
----
+* 🧠 **Analyst (Mary)** – brainstorms and explores ideas.
+* 📋 **Product Manager (John)** – creates the Product Requirements Document (PRD).
+* 🏗️ **Architect (Winston)** – designs technical architecture (front-end, back-end, or full-stack).
+* 🎨 **Designer (Ava)** – supports UI/UX layout and design.
+* 🔍 **QA / PO** – validates, tests, and aligns the build to goals.
 
-## 3) Kick Off Planning (PM)
-
-* Switch to Product Manager: `*pm`
-* Create an MVP PRD: reply with **audience**, **stage = MVP**, **format = detailed** when asked; then proceed section‑by‑section.
-
-**Outcome:** Section 1 of PRD is drafted.
+All BMAD commands begin with an asterisk `*` and are typed directly into the AI chat interface (not a CLI). Outputs appear as readable, well-formatted documents in the chat.
 
 ---
 
-## 4) Use the Elicitation Loop (Mandatory)
+## 2) Step 1 — Load the Team
 
-After each section, the PM presents options 0–9. Do one of the following:
+1. Upload the file `team-fullstack.txt` into your AI chat (ChatGPT, Gemini, or equivalent).
+2. Wait for confirmation that the BMAD team has loaded.
 
-* Type a number (e.g., `5` → Identify Risks) to refine the section.
-* Or type `9` to proceed to the next section.
-
-**Outcome:** Iterative, high‑quality PRD with your decisions captured.
+**Result:** Your AI session now has the full BMAD team active — ready to collaborate and generate structured outputs.
 
 ---
 
-## 5) Finish the PRD
+## 3) Step 2 — Start Brainstorming
 
-* Continue the loop until all PRD sections are completed (Goals, Personas, Functional/Non‑functional, UX, Exports, Accessibility, Metrics, Risks).
-* Optional: Ask for an executive summary.
+Type:
 
-**Outcome:** A complete MVP PRD in the canvas.
+```
+*brainstorm
+```
 
----
+Then choose **1 (Concept Brainstorm)** and describe your project idea.
 
-## 6) Move to Architecture 
+Example:
 
-* Switch to Architect: `*architect`
-* Run front‑end architecture: `*create-front-end-architecture` **OR**
-* Run backend‑end architecture: `*create-backend‑end-architecture`**OR**
-* Run full-stack architecture: `*create-full-stack-architecture`
-* The architect produces modules, state slices, engine APIs, perf, PWA, and a stepwise build plan.
+> “I want a web app for designers where they input one color and get complementary and gradient palettes.”
 
-**Outcome:** Front‑end Architecture document appears in canvas.
+BMAD will generate a structured **brainstorm document** — including purpose, features, users, and roadmap — directly in the chat.
 
----
-
-## 7) (Optional) Next Steps
-
-* Ask for **TypeScript engine stubs**, a **React + Tailwind scaffold**, or a **QA checklist**.
-* You can also request **roadmap**, **stories**, or **PO validation**.
-
-**Outcome:** Dev‑ready assets aligned to PRD/Architecture.
+**Result:** A formatted brainstorming plan appears in the chat, not as code or logs.
 
 ---
 
-## 8) Classroom Pointers
+## 4) Step 3 — Create the PRD (Product Manager)
 
-* Keep answers short while teaching. Highlight *why* a choice was made (e.g., OKLCH for perceptual accuracy).
-* Demonstrate a couple of elicitation options (e.g., #2 Critique & Refine, #5 Risks), then continue with `9`.
-* Emphasize **agent specialization**: PM for PRD, Architect for architecture; switch roles cleanly.
+Type:
 
----
+```
+*pm
+```
 
-## 9) Web → IDE Handoff (When Building Code)
+Then answer these questions:
 
-* Export/copy your PRD and Architecture into a repo at `docs/prd.md` and `docs/architecture.md`.
-* In IDE, shard docs (`*shard-doc`) and run the SM → Dev → QA loop story‑by‑story.
-* Continue to [IDE Doc](./IDE_Doc.md) for more information on IDE Handoff
+1. Audience → “Dev team”
+2. Stage → “MVP”
+3. Format → “Detailed”
 
----
+BMAD’s **Product Manager** will guide you through the **PRD** creation process, one section at a time.
+After each section, you’ll see an **elicitation menu (0–9)** allowing you to refine, critique, or continue.
 
-## 10) Cheat Sheet (Commands)
+Type **9** to proceed to the next section or another number for in-depth refinement.
 
-* `*help` — show commands
-* `*agent pm` or `*pm` — become Product Manager
-* `*agent architect` or `*architect` — become Architect
-* `*workflow-guidance` — get workflow suggestions
-* `#yolo` — toggle batch mode (not recommended for teaching)
+**Result:** A detailed PRD (10 sections) with goals, personas, requirements, UX, exports, accessibility, metrics, and risks — all readable directly in chat.
 
 ---
 
-## 11) What “Good” Looks Like (Acceptance Signals)
+## 5) Step 4 — Build the Architecture
 
-* Deterministic outputs via shareable URLs (PRD assumptions explicit; architecture reproducible)
-* All MVP features enumerated in PRD’s **Functional Requirements**
-* Architecture doc with **file structure**, **state slices**, **engine API**, **PWA**, **tests**, **performance targets**
-* Lighthouse ≥ 90, axe checks pass, core flows covered in e2e
+Type:
+
+```
+*architect
+```
+
+Then run one of these commands based on your focus:
+
+* `*create-front-end-architecture` → for client/UI architecture
+* `*create-back-end-architecture` → for API/server structure
+* `*create-full-stack-architecture` → for complete systems
+
+BMAD’s **Architect** (Winston) will produce a detailed technical blueprint — covering components, state management, data flow, performance, and implementation plans.
+
+**Result:** A clean, structured architecture document displayed directly in chat — easy to read, share, or export.
 
 ---
 
-## 12) Q&A Prompts You Can Use in Class
+## 6) Step 5 — Extend or Iterate
 
-* “Show me the numbered elicitation menu again.”
-* “Critique and refine the Functional Requirements.”
-* “What are 3 risks and their mitigations for the gradient engine?”
-* “Generate a Tailwind export example for this palette.”
-* “Create a 2‑week milestone plan from the Implementation Plan.”
+Once the core PRD and architecture are done, you can continue with:
+
+* `*qa` → generate QA test plan and checklist
+* `*designer` → create UI layout and component wireframes
+* `*workflow-guidance` → get next best steps or automation help
+
+You can also ask:
+
+> “Generate a 2-week sprint roadmap.”
+> “Make a JSON export format spec.”
+> “Create TypeScript stubs for the gradient engine.”
+
+---
+
+## 7) Step 6 — Export or Implement
+
+After your PRD and Architecture are generated:
+
+* Copy them from chat into your project repo (`/docs/prd.md` and `/docs/architecture.md`).
+* Follow Winston’s structure in your IDE.
+* Start coding or designing directly from these guides.
+
+**Result:** You now have production-ready documentation — created, reviewed, and iterated entirely in an AI chat interface.
+
+---
+
+## 8) Workflow Recap
+
+1. Upload `team-fullstack.txt` → loads the BMAD team.
+2. Type `*brainstorm` → generate idea.
+3. Type `*pm` → create PRD.
+4. Type `*architect` → generate architecture (front-end, back-end, or full-stack).
+5. (Optional) Add QA or Designer workflows.
+6. Export → Build → Review.
+
+---
+
+## 9) IDE Handoff — Next Steps
+
+Once all planning and architecture work in the AI chat is complete, the next phase happens inside your **development environment (IDE or CLI tool).**
+
+Open the file IDE_Doc.md to continue. That document explains:
+* How to set up your local environment
+* How to shard or import the BMAD docs into your repo
+* How to run the Developer and QA loops (Dev → QA → PO)
+
+Command examples for CLI-based interactions
+
+Action: Switch to your IDE or CLI tool and follow [```IDE_Doc.md```](./IDE_Doc.md) for implementation and testing guidance.

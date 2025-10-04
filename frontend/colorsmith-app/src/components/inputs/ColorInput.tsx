@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { parseColor } from '../../engine/color-space'
 import { useSeedSlice } from '../../state/useSeedSlice'
 import { isEyeDropperSupported, pickColorWithEyeDropper } from '../../utils/eyedropper'
