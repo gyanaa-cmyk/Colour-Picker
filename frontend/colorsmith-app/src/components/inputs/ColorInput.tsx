@@ -8,7 +8,7 @@ export default function ColorInput() {
     const seed = useSeedSlice((s) => s.seed)
     const setSeed = useSeedSlice((s) => s.setSeed)
 
-    const [hex, setHex] = useState(seed?.hex ?? '')
+    const [hex, setHex] = useState(seed?.hex ?? '#aabbcc')
     const [rgb, setRgb] = useState('')
     const [hsl, setHsl] = useState('')
     const [error, setError] = useState<string | null>(null)
@@ -31,52 +31,75 @@ export default function ColorInput() {
     }
 
     return (
-        <div style={{ display: 'grid', gap: 8, maxWidth: 420 }}>
-            <label>
-                HEX
-                <input
-                    value={hex}
-                    placeholder="#aabbcc or #abc"
-                    onChange={(e) => setHex(e.target.value)}
-                    onBlur={() => hex && onSubmit(hex)}
-                />
-            </label>
-            <label>
-                RGB
-                <input
-                    value={rgb}
-                    placeholder="rgb(255,0,0) or 255,0,0"
-                    onChange={(e) => setRgb(e.target.value)}
-                    onBlur={() => rgb && onSubmit(rgb)}
-                />
-            </label>
-            <label>
-                HSL
-                <input
-                    value={hsl}
-                    placeholder="hsl(0,100%,50%) or 0,100,50"
-                    onChange={(e) => setHsl(e.target.value)}
-                    onBlur={() => hsl && onSubmit(hsl)}
-                />
-            </label>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <button type="button" onClick={() => hex && onSubmit(hex)}>Apply</button>
-                {isEyeDropperSupported() ? (
-                    <button type="button" onClick={onPick}>Pick from Screen</button>
-                ) : (
-                    <small>EyeDropper not supported — use image picker below</small>
+        <div className="color-card" style={{ margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div className="color-input-vertical" style={{ width: '100%', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12, width: '100%' }}>
+                    <input
+                        className="color-picker"
+                        type="color"
+                        value={hex.startsWith('#') ? hex : '#aabbcc'}
+                        onChange={e => {
+                            setHex(e.target.value)
+                            onSubmit(e.target.value)
+                        }}
+                        aria-label="Pick color"
+                        style={{ width: 72, height: 72, minWidth: 72, minHeight: 72, border: 'none', background: 'none', boxShadow: '0 2px 8px 0 rgba(60,60,60,0.10)' }}
+                    />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: 16 }}>
+                    <label className="color-label" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        HEX
+                        <input
+                            className="color-input"
+                            value={hex}
+                            type="text"
+                            placeholder="#aabbcc or #abc"
+                            onChange={(e) => setHex(e.target.value)}
+                            onBlur={() => hex && onSubmit(hex)}
+                            style={{ width: 220, textAlign: 'center' }}
+                        />
+                    </label>
+                    <label className="color-label" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        RGB
+                        <input
+                            className="color-input"
+                            value={rgb}
+                            placeholder="rgb(255,0,0) or 255,0,0"
+                            onChange={(e) => setRgb(e.target.value)}
+                            onBlur={() => rgb && onSubmit(rgb)}
+                            style={{ width: 220, textAlign: 'center' }}
+                        />
+                    </label>
+                    <label className="color-label" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        HSL
+                        <input
+                            className="color-input"
+                            value={hsl}
+                            placeholder="hsl(0,100%,50%) or 0,100,50"
+                            onChange={(e) => setHsl(e.target.value)}
+                            onBlur={() => hsl && onSubmit(hsl)}
+                            style={{ width: 220, textAlign: 'center' }}
+                        />
+                    </label>
+                </div>
+            </div>
+            <div className="color-actions" style={{ justifyContent: 'center', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <button className="color-btn" type="button" style={{ minWidth: 120 }} onClick={() => hex && onSubmit(hex)}>Apply</button>
+                {isEyeDropperSupported() && (
+                    <button className="color-btn" type="button" onClick={onPick}>Pick from Screen</button>
+                )}
+                {!isEyeDropperSupported() && (
+                    <div style={{ marginTop: 4 }}>
+                        <small className="color-note">EyeDropper not supported — use image picker below</small>
+                    </div>
                 )}
             </div>
             {!isEyeDropperSupported() && (
-                <CanvasPicker onPick={(h) => onSubmit(h)} />
-            )}
-            {seed?.hex && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <div style={{ width: 32, height: 32, background: seed.hex, borderRadius: 4, border: '1px solid #ccc' }} />
-                    <code>{seed.hex}</code>
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <CanvasPicker onPick={(h) => onSubmit(h)} />
                 </div>
             )}
-            {error && <div style={{ color: 'crimson' }}>{error}</div>}
+            {error && <div className="color-error">{error}</div>}
         </div>
     )
 }

@@ -5,6 +5,14 @@ import type { SchemeId } from '../../engine'
 import { exportPalette, copyToClipboard } from '../../engine/export'
 
 const SCHEMES: SchemeId[] = ['complementary', 'analogous', 'monochromatic', 'split', 'triadic', 'square']
+const SCHEME_LABELS: Record<SchemeId, string> = {
+    complementary: 'Complementary',
+    analogous: 'Analogous',
+    monochromatic: 'Monochromatic',
+    split: 'Split',
+    triadic: 'Triadic',
+    square: 'Square',
+}
 
 export default function PaletteView() {
     const seed = useSeedSlice((s) => s.seed)
@@ -18,7 +26,6 @@ export default function PaletteView() {
     }, [seed, scheme, recompute])
 
     const [msg, setMsg] = useState<string | null>(null)
-    const [exportType, setExportType] = useState<'svg' | 'png' | 'css' | 'json'>('svg')
 
     const doExport = async (type: 'svg' | 'png' | 'css' | 'json') => {
         if (!palette) return
@@ -34,8 +41,8 @@ export default function PaletteView() {
     }
 
     return (
-        <div style={{ display: 'grid', gap: 12 }}>
-            <div role="group" aria-label="Select color scheme" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div className="palette-card">
+            <div role="group" aria-label="Select color scheme" className="scheme-row">
                 {SCHEMES.map((id: SchemeId) => (
                     <button
                         key={id}
@@ -43,41 +50,51 @@ export default function PaletteView() {
                         onClick={() => setScheme(id)}
                         aria-pressed={scheme === id}
                         disabled={!seed}
-                        style={{
-                            padding: '6px 10px',
-                            borderRadius: 6,
-                            border: '1px solid #ddd',
-                            background: scheme === id ? '#eef' : '#fff',
-                            cursor: seed ? 'pointer' : 'not-allowed',
-                        }}
+                        className={scheme === id ? 'scheme-btn active' : 'scheme-btn'}
                     >
-                        {id}
+                        {SCHEME_LABELS[id]}
                     </button>
                 ))}
             </div>
 
-            {!seed && <small>Enter a seed color to generate palettes</small>}
+            {!seed && <small className="palette-note">Enter a seed color to generate palettes</small>}
 
             {palette && (
                 <>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(64px, 1fr))', gap: 8 }}>
+                    <div className="palette-swatches">
                         {palette.colors.map((c, idx) => (
-                            <div key={idx} style={{ display: 'grid', gap: 4, justifyItems: 'center' }}>
+                            <div
+                                key={idx}
+                                className="swatch-card"
+                                style={{ cursor: 'pointer' }}
+                                onClick={async () => {
+                                    try {
+                                        await copyToClipboard(c.hex)
+                                        setMsg(`${c.hex} copied!`)
+                                    } catch (e) {
+                                        console.log(e)
+                                        setMsg('Copy failed: Clipboard not available')
+                                    }
+                                    setTimeout(() => setMsg(null), 1500)
+                                }}
+                                title="Click to copy color"
+                            >
                                 <div
                                     role="img"
                                     aria-label={`swatch ${idx + 1} ${c.hex}`}
-                                    style={{ width: 64, height: 64, borderRadius: 8, border: '1px solid #ccc', background: c.hex }}
+                                    className="swatch-color"
+                                    style={{ background: c.hex }}
                                 />
-                                <code style={{ fontSize: 12 }}>{c.hex}</code>
+                                <code className="swatch-code">{c.hex}</code>
                             </div>
                         ))}
                     </div>
-                    <div style={{ marginTop: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <div className="palette-export-row">
                         <span>Export:</span>
                         {(['svg', 'png', 'css', 'json'] as const).map(type => (
-                            <button key={type} type="button" onClick={() => doExport(type)}>{type.toUpperCase()}</button>
+                            <button key={type} className="palette-btn" type="button" onClick={() => doExport(type)}>{type.toUpperCase()}</button>
                         ))}
-                        {msg && <span style={{ color: 'green', marginLeft: 8 }}>{msg}</span>}
+                        {msg && <span className="palette-msg">{msg}</span>}
                     </div>
                 </>
             )}

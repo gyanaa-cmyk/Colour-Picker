@@ -50,9 +50,16 @@ export function exportGradient(gradient: Gradient, format: 'svg' | 'png' | 'css'
 }
 
 export async function copyToClipboard(data: string | Blob): Promise<void> {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+        throw new Error('Clipboard API not available')
+    }
     if (typeof data === 'string') {
         await navigator.clipboard.writeText(data)
     } else if (data instanceof Blob) {
-        await navigator.clipboard.write([new ClipboardItem({ [data.type]: data })])
+        if (typeof window.ClipboardItem !== 'undefined') {
+            await navigator.clipboard.write([new window.ClipboardItem({ [data.type]: data })])
+        } else {
+            throw new Error('ClipboardItem API not available')
+        }
     }
 }
