@@ -209,9 +209,18 @@
 .palette-export-row {
   display: flex;
   gap: 1rem;
+  flex-direction: column;
   align-items: center;
   margin-top: 0.5em;
 }
+
+.palette-export-row div {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.5em;
+}
+
 .palette-btn {
   background: #646cff;
   color: #fff;

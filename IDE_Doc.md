@@ -1,6 +1,6 @@
 # ColorSmith — IDE Handoff (Live Build Log)
 
-> This document records all IDE-side steps performed during the BMAD classroom demo. It will later be condensed into a single `IDE-Handoff.md` guide for developers.
+> This document records all IDE-side steps performed during the BMAD classroom demo.
 
 ---
 

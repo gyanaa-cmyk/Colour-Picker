@@ -30,14 +30,40 @@ export default function PaletteView() {
     const doExport = async (type: 'svg' | 'png' | 'css' | 'json') => {
         if (!palette) return
         const out = exportPalette(palette, type)
-        if (type === 'png') {
-            // Open PNG in new tab
-            window.open(out as string, '_blank')
-            setMsg('PNG opened in new tab')
+        // Download as file for all types
+        let blob: Blob
+        let filename = `palette.${type}`
+        if (type === 'svg') {
+            blob = new Blob([out as string], { type: 'image/svg+xml' })
+        } else if (type === 'css') {
+            blob = new Blob([out as string], { type: 'text/css' })
+        } else if (type === 'json') {
+            blob = new Blob([out as string], { type: 'application/json' })
+        } else if (type === 'png') {
+            // out is a data URL, convert to Blob
+            const dataUrl = out as string
+            const byteString = atob(dataUrl.split(',')[1])
+            const mimeString = dataUrl.split(',')[0].split(':')[1].split(';')[0]
+            const ab = new ArrayBuffer(byteString.length)
+            const ia = new Uint8Array(ab)
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i)
+            }
+            blob = new Blob([ab], { type: mimeString })
         } else {
-            await copyToClipboard(out as string)
-            setMsg(type.toUpperCase() + ' copied to clipboard')
+            blob = new Blob([out as string])
         }
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+            document.body.removeChild(a)
+            URL.revokeObjectURL(url)
+        }, 100)
+        setMsg(type.toUpperCase() + ' downloaded')
     }
 
     return (
@@ -90,11 +116,13 @@ export default function PaletteView() {
                         ))}
                     </div>
                     <div className="palette-export-row">
-                        <span>Export:</span>
-                        {(['svg', 'png', 'css', 'json'] as const).map(type => (
-                            <button key={type} className="palette-btn" type="button" onClick={() => doExport(type)}>{type.toUpperCase()}</button>
-                        ))}
                         {msg && <span className="palette-msg">{msg}</span>}
+                        <div>
+                            <span>Export:</span>
+                            {(['svg', 'png', 'css', 'json'] as const).map(type => (
+                                <button key={type} className="palette-btn" type="button" onClick={() => doExport(type)}>{type.toUpperCase()}</button>
+                            ))}
+                        </div>
                     </div>
                 </>
             )}
